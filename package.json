@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "autoprefixer": "^10.4.19",
+    "d": "^1.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.23.0",
     "socket.io-client": "^4.7.5"
   },
   "devDependencies": {

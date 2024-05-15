@@ -1,18 +1,29 @@
-import { useEffect, useState } from 'react';
-import './App.css'
-import Room from './pages/Room';
-import { Socket, io } from "socket.io-client";
+import Header from "./components/Header";
+// import Auth from "./pages/Auth";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import ChatRoom from "./pages/ChatRoom";
+import Footer from "./components/Footer";
+import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
+
 const App = () => {
-  const [socket, setSocket] = useState<Socket | null>(null);
-  useEffect(() => {
-    const socket = io('http://localhost:4000/', { withCredentials: true });
-    setSocket(socket);
-  }, []);
+
+  // Love me Jeje
   return (
-    <>
-      {socket && <Room socket={socket} />}
-    </>
-  )
+    <div className="bg-black text-white w-full h-full absolute">
+      <Header />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<SignIn />} />
+          <Route path="/chat" element={<ChatRoom />} />
+        </Routes>
+      </Router>
+      <Footer />
+    </div>
+  );
 }
 
 export default App;
