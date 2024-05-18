@@ -4,8 +4,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import ChatRoom from "./pages/ChatRoom";
 import Footer from "./components/Footer";
-import SignUp from "./pages/SignUp";
-import SignIn from "./pages/SignIn";
+import Auth from "./pages/Auth";
 
 const App = () => {
 
@@ -16,8 +15,8 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<SignIn />} />
+          <Route path="/signup" element={<Auth signup={true} login={false}/>} />
+          <Route path="/login" element={<Auth login={true} signup={false}/>} />
           <Route path="/chat" element={<ChatRoom />} />
         </Routes>
       </Router>

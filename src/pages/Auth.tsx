@@ -1,38 +1,21 @@
 import { useState } from "react";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
+import { Link } from "react-router-dom";
 
-const Auth = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [isLogin, setIsLogin] = useState(false);
-
-    const handleSubmit = () => {
-        const fetchURI = isLogin ? 'http://localhost:4000/auth/login' : 'http://localhost:4000/auth/register';
-        fetch(fetchURI, {
-            method: "POST",
-            mode: "cors",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password })
-        })
-        .then((res) => res.json())
-        .then((data) => console.log(data))
-    }
+const Auth: React.FC<{ signup: boolean, login: boolean }> = ({ signup, login }) => {
+    const isLogin = login;
+    const isSignUp = signup;
+    const selectedStyles = "bg-black text-white"
     return (
-        <div>
-            <button onClick={() => setIsLogin(!isLogin)}>SignUp | Login</button>
-            <form method="POST" onSubmit={handleSubmit}>
-                <label htmlFor="email">Email</label>
-                <input type="email" name="email" id="email" onChange={(e) => setEmail(e.target.value)} />
-                <br />
-
-                <label htmlFor="password">Password</label>
-                <input type="password" name="password" id="password" onChange={(e) => setPassword(e.target.value )} />
-
-                <input type="submit" value="Sign-up" />
-
-            </form>
+        <div className="flex flex-col items-center justify-center bg-white text-black mx-auto py-12 ">
+            <h1 className="text-5xl uppercase font-black">Shaed</h1>
+            <div className=" flex justify-center items-center mt-4 border border-black">
+                <button className={`cursor p-4  ${isLogin && selectedStyles}`}><Link to={"/login"}>Login</Link></button>
+                <button className={`cursor p-4 ${isSignUp && selectedStyles}`}><Link to={"/signup"}>SignUp</Link></button>
+            </div>
+            {isLogin && <SignIn />}
+            {isSignUp && <SignUp />}
         </div>
     );
 }
