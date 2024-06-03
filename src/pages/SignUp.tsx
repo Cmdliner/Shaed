@@ -2,7 +2,7 @@ import { FormEvent, useState } from "react";
 
 const SERVER_URI = 'http://localhost:4000';
 const SignUp = () => {
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errMessages, setErrmessages] = useState<String[]>([]);
@@ -19,13 +19,16 @@ const SignUp = () => {
             headers: { "Content-Type": "application/json" },
             mode: 'cors',
             credentials: 'include',
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ username, password })
         });
         if (!res.ok) {
             console.error("An error occured")
             setErrmessages([...errMessages, `${res.body}`]);
         }
         const data = await res.json();
+        if (data?.['errMssg']) {
+            setErrmessages([...errMessages, data['errMssg']])
+        }
         console.log(data);
         location.assign("/")
     }
@@ -33,11 +36,11 @@ const SignUp = () => {
         <>
             <form onSubmit={(e) => handleSubmit(e)} className="w-[95%] md:w-[50%]">
                 <div className="flex flex-col px-8 py-4">
-                    <label htmlFor="email" className="font-bold text-2xl">Email</label>
+                    <label htmlFor="username" className="font-bold text-2xl">Username</label>
                     <input
-                        type="email" name="email"
-                        id="email"
-                        onChange={(e) => setEmail(e.target.value)}
+                        type="text" name="username"
+                        id="username"
+                        onChange={(e) => setUsername(e.target.value)}
                         className="border border-black p-4 focus:rounded-xl focus:outline-none focus:border-2" />
                 </div>
                 <div className="flex flex-col px-8 py-4">

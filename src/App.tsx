@@ -1,10 +1,11 @@
 import Header from "./components/Header";
-// import Auth from "./pages/Auth";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import ChatRoom from "./pages/ChatRoom";
+import ChatRoom from "./pages/Room";
 import Footer from "./components/Footer";
 import Auth from "./pages/Auth";
+import CreateRoom from "./pages/CreateRoom";
+import Rooms from "./pages/Rooms";
 
 const App = () => {
 
@@ -17,7 +18,9 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Auth signup={true} login={false}/>} />
           <Route path="/login" element={<Auth login={true} signup={false}/>} />
-          <Route path="/chat" element={<ChatRoom />} />
+          <Route path="/create-room" element={<CreateRoom />} />
+          <Route path="/rooms" element={<Rooms/>}/>
+          <Route path="/:id/chat" element={<ChatRoom />} />
         </Routes>
       </Router>
       <Footer />
