@@ -1,27 +1,33 @@
 import { FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CreateRoom = () => {
     const [name, setName] = useState("");
-    // const [mssg, setMssg] = useState<String[]>([""]);
-    const URI = "http://localhost:4000/api/v1/rooms/create"
+    const navigate = useNavigate();
+    const [error, setError] = useState("");
+    const URI = `${import.meta.env.VITE_API_SERVER_URI}/rooms/create`;
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        const res = await fetch(URI,
-            {
+        try {
+            const res = await fetch(URI, {
                 headers: { "Content-Type": "application/json" },
                 method: 'POST',
                 mode: 'cors',
                 credentials: 'include',
-                body: JSON.stringify({name})
+                body: JSON.stringify({ name })
             });
-        const data = await res.json();
-        console.log(data);
-        location.assign("/rooms");
+            const data = await res.json();
+            if(data["errMsssg"]) setError(data["errMssg"]);
+            else navigate("/rooms");
+        } catch (err: any) {
+            console.error((err as Error).message);
+            setError((err as Error).message);
+        }
     }
     return (
         <>
             <div>
-
+                {error && <h3>{error} </h3> }
             </div>
             <form onSubmit={(e) => handleSubmit(e)}
                 className="max-w-[600px] m-auto p-4 border border-teal">

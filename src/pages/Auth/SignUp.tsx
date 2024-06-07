@@ -1,11 +1,12 @@
 import { FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const SERVER_URI = 'http://localhost:4000';
 const SignUp = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [errMessages, setErrmessages] = useState<String[]>([]);
+    const [errMessages, setErrmessages] = useState<string[]>([]);
 
     const passwordMatch = () => password === confirmPassword;
     const handleSubmit = async (e: FormEvent) => {
@@ -14,7 +15,7 @@ const SignUp = () => {
             setErrmessages([...errMessages, "Passwords aren't the same"])
             return;
         }
-        const res = await fetch(`${SERVER_URI}/api/v1/auth/register`, {
+        const res = await fetch(`${import.meta.env.VITE_AUTH_SERVER_URI}/register`, {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             mode: 'cors',
@@ -26,14 +27,18 @@ const SignUp = () => {
             setErrmessages([...errMessages, `${res.body}`]);
         }
         const data = await res.json();
-        if (data?.['errMssg']) {
+        if (data['errMssg']) {
             setErrmessages([...errMessages, data['errMssg']])
         }
-        console.log(data);
-        location.assign("/")
+        else navigate("/")
     }
     return (
         <>
+            <ul>
+                {errMessages && errMessages.map((errMssg: string, index: number) => (
+                    <li key={index}>{errMssg}</li>
+                ))}
+            </ul>
             <form onSubmit={(e) => handleSubmit(e)} className="w-[95%] md:w-[50%]">
                 <div className="flex flex-col px-8 py-4">
                     <label htmlFor="username" className="font-bold text-2xl">Username</label>

@@ -1,33 +1,40 @@
 import { FormEvent, useState } from "react";
-const SERVER_URI = "http://localhost:4000"
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [errMessages, setErrmessages] = useState<string[]>([]);
 
     const handleSubmit = async (e: FormEvent) => {
         const signInHeaders = new Headers({ "Content-Type": "application/json" });
         e.preventDefault();
-        const res = await fetch(`${SERVER_URI}/api/v1/auth/sign-in`, {
+        const res = await fetch(`${import.meta.env.VITE_AUTH_SERVER_URI}/sign-in`, {
             method: 'POST',
             mode: 'cors',
             credentials: 'include',
             headers: signInHeaders,
             body: JSON.stringify({ username, password })
         });
-        if (!res.ok) {
-            throw new Error("Something went wrong!")
-        }
+
         const data = await res.json();
-        console.log(data);
-        location.assign("/")
+        if (data['errMssg']) {
+            setErrmessages([...errMessages, data['errMssg']])
+        }
+        else navigate("/rooms");
 
     }
     return (
         <>
+            <ul>
+                {errMessages && errMessages.map((errMssg: string, index: number) => (
+                    <li key={index}>{errMssg}</li>
+                ))}
+            </ul>
             <form onSubmit={(e) => handleSubmit(e)} className="w-[95%] md:w-[50%]">
                 <div className="flex flex-col px-8 py-4">
-                    <label htmlFor="username" className="font-bold text-2xl">username</label>
+                    <label htmlFor="username" className="font-bold text-2xl">Username</label>
                     <input
                         type="text" name="username"
                         id="username"
