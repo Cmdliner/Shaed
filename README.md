@@ -6,3 +6,5 @@
 - Create Error Message Component with Styles
 - Protected routes !!! E.g. "/rooms"
 - Cannot reset text; fetch error (try alternative data loader);
+- Removed dependencies from shadcn UI
+- Just use tailwind + tailwindcss

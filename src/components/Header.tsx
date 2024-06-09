@@ -1,13 +1,26 @@
-const Header = () => {
+import { BsFillChatDotsFill } from "react-icons/bs";
+import { Link } from "react-router-dom";
+
+const Header: React.FC = () => {
     return (
-        <header className="flex justify-between items-center w-full px-[1rem] p-6  border-b border-slate-500 bg-black text-white">
-            <a href="/">
-                <h1 className="text-2xl font-bold">Shaed</h1>
-            </a>
-            <ul className="flex gap-2 font-light text-[1rem]">
-                <li> <a href="/signup">Sign Up</a></li>
-                <li> <a href="/chat">Chat</a></li>
-            </ul>
+        <header className="navbar bg-base-100 fixed z-[9999]">
+            <div className="navbar bg-base-100">
+                <Link to="/" className="btn btn-ghost text-xl">Shaed</Link>
+            </div>
+            <div className="navbar-end">
+                <ul className="menu menu-horizontal px-1">
+                    <li><Link to="/register">Sign-In</Link></li>
+                    <li><Link to="/">Create Room</Link></li>
+                </ul>
+                <button className="btn btn-ghost btn-circle">
+                    <div className="indicator">
+                        <BsFillChatDotsFill />
+                        <span className="badge badge-xs badge-primary indicator-item"></span>
+                    </div>
+
+
+                </button>
+            </div>
         </header>
 
     );
