@@ -17,7 +17,7 @@ export default {
     daisyui
   ],
   daisyui: {
-    themes: ["light"]
+     themes: ["light","dark", /*"black", "luxury" */]
   }
 }
 
