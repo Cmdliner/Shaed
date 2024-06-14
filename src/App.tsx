@@ -8,6 +8,9 @@ import Logout from "./pages/Auth/Logout";
 import Rooms from "./pages/Chat/Rooms";
 import ProtectedRoute from "./pages/Auth/Protected";
 import RoomLayout from "./Layout/RoomLayout";
+import LeaveRoom from "./pages/Chat/LeaveRoom";
+import ChatRoom from "./pages/Chat/Room";
+import JoinRoom from "./pages/Chat/JoinRoom";
 
 const App = () => {
 
@@ -17,10 +20,10 @@ const App = () => {
 
                 {/* Room routes */}
                 <Route path="/rooms" element={<RoomLayout />} >
-                    <Route path="/rooms/" element={
-                        <ProtectedRoute>
-                            <Rooms />
-                        </ProtectedRoute>} />
+                    <Route path="/rooms/" element={<ProtectedRoute><Rooms /></ProtectedRoute>} />
+                    <Route path="/rooms/:roomID/chat" element={<ProtectedRoute><ChatRoom /></ProtectedRoute>} />
+                    <Route path="/rooms/:roomID/join" element={<ProtectedRoute><JoinRoom /></ProtectedRoute>} />
+                    <Route path="/rooms/:roomID/leave" element={<ProtectedRoute><LeaveRoom /></ProtectedRoute>} />
                 </Route>
 
 

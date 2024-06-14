@@ -3,7 +3,6 @@ import { API_SERVER } from "../utils/env_alias";
 import {  useState, useEffect } from "react";
 import RoomHeader from "../components/RoomHeader";
 import ErrorList from "../components/ErrorList";
-import useFetch from "../utils/useFetch";
 
 const RoomLayout = () => {
     const [errors, setErrors] = useState<string[]>([]);
@@ -49,16 +48,16 @@ const RoomLayout = () => {
 	<>
 	<RoomHeader />
         <div className="flex">
-            <aside className="border-r border-black min-w-[15%] min-h-screen">
+            <aside className="border-r border-black min-w-[15%] min-h-screen p-4">
                 {isLoading && <div>Loading...</div> }
                 {errors && <ErrorList errors={errors} />}
                 {(rooms && rooms.length > 0) && rooms.map((room: any) => (
                     <div key={room._id!}>
-                        <Link to={`/room/${room._id!}`}>{room.name}</Link>
+                        <Link to={`/rooms/${room._id!}/chat`}>{room.name}</Link>
                     </div>
                 ))}
             </aside>
-            <main>
+            <main className="p-4">
                 <Outlet />
             </main>
         </div>  

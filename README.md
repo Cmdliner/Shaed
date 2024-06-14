@@ -2,9 +2,7 @@
 
 ## TODO
 - Create a `useFetch` hook that accepts a route action, request body as an object and returns an errorMessage if there is one and the data sent.
-- No Auth error redirect in frontend (sort of protected routes)
-- Create Error Message Component with Styles
-- Protected routes !!! E.g. "/rooms"
-- Cannot reset text; fetch error (try alternative data loader);
-- Removed dependencies from shadcn UI
-- Just use tailwind + tailwindcss
+- UI overflows on smaller screens
+- Use the new hook on other components
+- Room Layout navbar should be done correctly
+- On submit of form route to rooms

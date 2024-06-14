@@ -7,9 +7,9 @@ const useAuth = () => {
         authenticated: boolean;
     }
 
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         async function fetchAuthStatus() {
@@ -34,7 +34,7 @@ const useAuth = () => {
         fetchAuthStatus();
     }, []);
 
-    return [isAuthenticated, isLoading, error];
+    return [isAuthenticated, isLoading, error] as const;
 };
 
 export default useAuth;

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const RoomHeader = () => {
 	return (
 		<> 
@@ -8,7 +10,7 @@ const RoomHeader = () => {
     </button>
   </div>
   <div className="flex-1">
-    <a className="btn btn-ghost text-xl">daisyUI</a>
+    <Link to="/" className="btn btn-ghost text-xl">Shaed</Link>
   </div>
   <div className="flex-none">
     <button className="btn btn-square btn-ghost">

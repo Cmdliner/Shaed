@@ -22,7 +22,7 @@ const Home = () => {
                     <div>
                         <h1 className="text-5xl font-bold">Version 2 is coming soon!</h1>
                         <p className="py-6 text-2xl         ">Version 2 is coming with new features like <br />   
-                        <span>Chat with AI</span> &amp; <span className="text-2xl">Anonymous chat rooms</span>
+                        <span>Chat with AI</span>, <span>Private chat rooms</span> and <span className="text-2xl">Anonymous chat rooms</span>
                         </p>
                         
                         <a href="https://github.com/Cmdliner/Shaed" target="_blank" rel="noopener noreferrer">
