@@ -6,12 +6,12 @@ interface FetchState<T> {
     isLoading: boolean;
 }
 
-interface UseFetchOnSubmitOptions extends RequestInit {
+interface useFetchOnActionOptions extends RequestInit {
     onSuccess?: (data: any) => void;
     onError?: (error: Error) => void;
 }
 
-function useFetchOnSubmit<T = any>(url: string, options: UseFetchOnSubmitOptions = {}): [
+function useFetchOnAction<T = any>(url: string, options: useFetchOnActionOptions = {}): [
     (data?: object) => Promise<void>,
     FetchState<T>,
     () => void
@@ -32,14 +32,11 @@ function useFetchOnSubmit<T = any>(url: string, options: UseFetchOnSubmitOptions
         });
     }, []);
 
-    const fetchData = useCallback(async (data?: object) => {
+    const fetchData = useCallback(async () => {
         setFetchState(prevState => ({ ...prevState, isLoading: true, error: null }));
 
         try {
             const response = await fetch(url, fetchOptions);
-
-
-
             const result = await response.json();
             if (result["errMssg"]) {
                 setFetchState({
@@ -54,7 +51,6 @@ function useFetchOnSubmit<T = any>(url: string, options: UseFetchOnSubmitOptions
                     isLoading: false,
                 });
             }
-
 
             onSuccess?.(result);
         } catch (error) {
@@ -71,4 +67,4 @@ function useFetchOnSubmit<T = any>(url: string, options: UseFetchOnSubmitOptions
     return [fetchData, fetchState, reset];
 }
 
-export default useFetchOnSubmit;
+export default useFetchOnAction;

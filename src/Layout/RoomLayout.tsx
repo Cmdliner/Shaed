@@ -14,9 +14,6 @@ const RoomLayout = () => {
         mode: 'cors',
         credentials: 'include'
     }
-    // const [data, isLoading, error] = useFetch(`${API_SERVER}/user/rooms`, fetchOptions);
-    // if(error) setErrors([...errors, error]);
-    // else setRooms((data?.rooms?.length ?? 0) > 0 ? data?.rooms: []);
     useEffect(() => {
         async function fetchRooms() {
             let error = "";
@@ -57,7 +54,7 @@ const RoomLayout = () => {
                     </div>
                 ))}
             </aside>
-            <main className="p-4">
+            <main className="p-4 border border-red-500 w-auto">
                 <Outlet />
             </main>
         </div>  

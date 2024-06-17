@@ -1,25 +1,46 @@
 import { FormEvent, useState } from "react";
 import { genFetchOpts } from "../../utils/fetch_options";
+import { BiChat } from "react-icons/bi";
+import useFetchOnAction from "../../utils/useFetchOnAction";
+import { API_SERVER } from "../../utils/env_alias";
+import { useNavigate } from "react-router-dom";
+import ErrorInfo from "../../components/ErrorInfo";
+
 
 const CreateRoom = () => {
+    const navigate = useNavigate();
     const [roomName, setRoomName] = useState("");
-    const _roomFetchOpts = genFetchOpts("POST", JSON.stringify({ name: roomName }))
+    const [errorMssg, setErrorMssg] = useState("");
+    const roomFetchOpts = genFetchOpts("POST", JSON.stringify({ name: roomName }));
+    const [createRoom, { error, isLoading }, reset] = useFetchOnAction(`${API_SERVER}/rooms/create`, {
+        ...roomFetchOpts,
+        onSuccess: (data) => {
+            if (!data["errMssg"]) navigate('/rooms');
+        },
+        onError: (err) => {
+            setErrorMssg(err.message);
+            console.error(error);
+            reset();
+        }
+    });
 
-    function handleCreateRoom(e: FormEvent) {
+    async function handleCreateRoom(e: FormEvent) {
         e.preventDefault();
+        await createRoom();
     }
 
     return (
         <div className="pt-[8rem] min-h-screen">
-            <form onSubmit={(e) => handleCreateRoom(e)}>
-                <h1 className="text-3xl font-bold text-center mb-[4rem]">Sign-In</h1>
+            <form className="flex flex-col md:max-w-[70%] m-auto" onSubmit={(e) => handleCreateRoom(e)}>
+                <h1 className="text-3xl font-bold text-center mb-[4rem]">New Room</h1>
+                {errorMssg && <ErrorInfo error={errorMssg} />}
                 <div className="mb-[2rem]">
                     <label className="input input-bordered flex items-center gap-2 mb-5">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>
-                        <input type="text" className="grow" placeholder="username" onChange={(e) => setRoomName(e.target.value)} />
+                        <BiChat />
+                        <input type="text" className="grow" placeholder="Room Name" onChange={(e) => setRoomName(e.target.value)} />
                     </label>
                 </div>
-                <button className="btn btn-wide btn-neutral flex self-center">Sign In</button>
+                <button className="btn btn-wide btn-neutral flex self-center" disabled={isLoading}>Create</button>
             </form>
         </div>
     )

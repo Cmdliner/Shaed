@@ -1,8 +1,8 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AUTH_SERVER } from "../../utils/env_alias";
 import ErrorList from "../../components/ErrorList";
-import useFetchOnSubmit from "../../utils/useFetchOnSubmit";
+import useFetchOnAction from "../../utils/useFetchOnAction";
 import { genFetchOpts } from "../../utils/fetch_options";
 
 interface ILoginData {
@@ -17,17 +17,14 @@ const SignIn = () => {
     const serializedBody = JSON.stringify({ username, password });
     
 
-    const [login, {data, error, isLoading}, reset] = useFetchOnSubmit<ILoginData>(
+    const [login, {error, isLoading}, reset] = useFetchOnAction<ILoginData>(
         `${AUTH_SERVER}/sign-in`,
         {
             ...(genFetchOpts('POST', serializedBody)),
             onSuccess: (data) => {
                 if(!data["errMssg"]) navigate("/")
             },
-            onError: (err) => {
-                console.error(err);
-                // setErrors([...errors, err.message]);
-            }
+            onError: (err) => setErrors([...errors, err.message])
         },
     );
     if(error) {
@@ -37,7 +34,7 @@ const SignIn = () => {
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
-        await login({username, password});
+        await login();
     }
 
     return (

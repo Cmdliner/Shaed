@@ -1,8 +1,9 @@
 import { FormEvent, useState } from "react";
 import { AUTH_SERVER } from "../../utils/env_alias";
 import { Link, useNavigate } from "react-router-dom";
-import useFetch from "../../utils/useFetch";
 import ErrorList from "../../components/ErrorList";
+import useFetchonAction from "../../utils/useFetchOnAction";
+import { genFetchOpts } from "../../utils/fetch_options";
 
 const Register = () => {
     const [username, setUsername] = useState("");
@@ -10,23 +11,32 @@ const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errors, setErrors] = useState<string[]>([]);
     const navigate = useNavigate();
+    const ReqPayload = JSON.stringify({ username, password });
+    const [register, { error, isLoading }, reset] = useFetchonAction(
+        `${AUTH_SERVER}/register`, 
+        { 
+            ...(genFetchOpts('POST', ReqPayload)),
+            onSuccess: (data) => {
+                if(!data["errMssg"]) navigate("/create-room");
+            },
+            onError: (error) => {
+                setErrors([...errors, error.message]);
+            }
+        });
 
+        if(error) {
+            setErrors([...errors, error.message])
+            reset();
+        }
+    
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
         if (!(password === confirmPassword)) {
             setErrors([...errors, "Passwords don't match!"]);
             return;
         }
-        const fetchOptions: RequestInit = {
-            headers: { "Content-Type": "application/json" },
-            method: 'POST',
-            mode: 'cors',
-            credentials: 'include',
-            body: JSON.stringify({ username, password })
-        }
-        const [_data, _isLoading, error] = await useFetch(`${AUTH_SERVER}/register`, fetchOptions);
-        if (error) setErrors([...errors, (error)]);
-        navigate("/");
+        await register();
+        
 
     }
 
@@ -54,7 +64,7 @@ const Register = () => {
                             <input type="password" placeholder="confirm password" className="grow" minLength={6} onChange={(e) => setConfirmPassword(e.target.value)} />
                         </label>
                     </div>
-                    <button className="btn btn-wide btn-neutral self-center">Register</button>
+                    <button className="btn btn-wide btn-neutral self-center" disabled={isLoading}>Register</button>
                     <p className="self-center my-4">Already have an account? <Link className="underline" to="/login">Sign In</Link></p>
                 </form>
             </section>
