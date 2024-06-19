@@ -3,6 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+	box-sizing: border-box;
+}
 @layer base {
 	header {
 		font-family: Inter

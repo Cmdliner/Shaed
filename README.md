@@ -1,8 +1,9 @@
 # SHAED (An anonymous chat application)
 
 ## TODO
-- Implement send message in `room.tsx`
+- useFetchOnSubmit skips one call
 - Proeprly format UI in `Room Layout`
-- UI overflows on smaller screens
 - Room Layout navbar should be done correctly
-- On submit of form route to rooms
+- Set Room name in header using local storage to set current room name. i.e create a uselocalStorage Hook
+- Rewrite all the fetchHooks
+- Cannot clear message input

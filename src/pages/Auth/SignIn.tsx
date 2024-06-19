@@ -22,7 +22,7 @@ const SignIn = () => {
         {
             ...(genFetchOpts('POST', serializedBody)),
             onSuccess: (data) => {
-                if(!data["errMssg"]) navigate("/")
+                if(!data["errMssg"]) navigate("/rooms")
             },
             onError: (err) => setErrors([...errors, err.message])
         },

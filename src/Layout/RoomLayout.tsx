@@ -1,13 +1,13 @@
 import { Link, Outlet } from "react-router-dom";
 import { API_SERVER } from "../utils/env_alias";
-import {  useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import RoomHeader from "../components/RoomHeader";
-import ErrorList from "../components/ErrorList";
+import ErrorInfo from "../components/ErrorInfo";
 
 const RoomLayout = () => {
-    const [errors, setErrors] = useState<string[]>([]);
+    const [error, setError] = useState("");
     const [rooms, setRooms] = useState<any[]>();
-    const [isLoading, setIsLoading] =  useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const fetchOptions: RequestInit = {
         headers: { "Content-Type": "application/json" },
         method: "GET",
@@ -16,22 +16,20 @@ const RoomLayout = () => {
     }
     useEffect(() => {
         async function fetchRooms() {
-            let error = "";
-            
+
             try {
                 const res = await fetch(`${API_SERVER}/user/rooms`, fetchOptions);
                 const data = await res.json();
-                
+
                 if (data["errMssg"]) {
-                    error = data["errMssg"];
-                    setErrors([...errors, error]);
+                    setError(data["errMssg"]);
                 }
-                if(!data["errMssg"] && data.rooms.length === 0) setRooms(["No rooms yet :("]);
-                else setRooms(data.rooms);        
+                if (!data["errMssg"] && data.rooms.length === 0) setRooms(["No rooms yet :("]);
+                else setRooms(data.rooms);
 
             } catch (err) {
                 console.error(err);
-                setErrors([...errors, (err as Error).message ]);
+                setError((err as Error).message);
             } finally {
                 setIsLoading(false);
             }
@@ -42,23 +40,28 @@ const RoomLayout = () => {
 
     return (
 
-	<>
-	<RoomHeader />
-        <div className="flex">
-            <aside className="border-r border-black min-w-[15%] min-h-screen p-4">
-                {isLoading && <div>Loading...</div> }
-                {errors && <ErrorList errors={errors} />}
-                {(rooms && rooms.length > 0) && rooms.map((room: any) => (
-                    <div key={room._id!}>
-                        <Link to={`/rooms/${room._id!}/chat`}>{room.name}</Link>
+        <>
+            <div className="grid grid-cols-1 md:grid-cols-2 w-full">
+                <aside className="hidden md:block border-r border-black p-4 h-screen overflow-y-auto">
+                    <Link to="/" className="text-3xl">Shaed</Link>
+                    <hr />
+                    {isLoading && <div>Loading...</div>}
+                    {error && <ErrorInfo error={error} />}
+                    {(rooms && rooms.length > 0) && rooms.map((room: any) => (
+                        <div key={room._id!}>
+                            <Link to={`/rooms/${room._id!}/chat`}>{room.name}</Link>
+                        </div>
+                    ))}
+                    {(rooms && rooms.length === 0 && <div> No rooms yet :( </div>)}
+                </aside>
+                <main className="flex flex-col justify-between p-4 border h-screen overflow-y-auto">
+                    <div className="sticky top-0 z-[9999]  border border-red-500">
+                    <RoomHeader />
                     </div>
-                ))}
-            </aside>
-            <main className="p-4 border border-red-500 w-auto">
-                <Outlet />
-            </main>
-        </div>  
-	</>
+                    <Outlet />
+                </main>
+            </div>
+        </>
     );
 }
 

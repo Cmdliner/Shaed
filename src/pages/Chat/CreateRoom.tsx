@@ -30,7 +30,7 @@ const CreateRoom = () => {
     }
 
     return (
-        <div className="pt-[8rem] min-h-screen">
+        <div className="pt-[8rem] px-8 min-h-screen">
             <form className="flex flex-col md:max-w-[70%] m-auto" onSubmit={(e) => handleCreateRoom(e)}>
                 <h1 className="text-3xl font-bold text-center mb-[4rem]">New Room</h1>
                 {errorMssg && <ErrorInfo error={errorMssg} />}

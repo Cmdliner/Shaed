@@ -1,5 +1,6 @@
 import { AUTH_SERVER } from "./env_alias";
 import { useState, useEffect } from "react";
+import { genFetchOpts } from "./fetch_options";
 
 const useAuth = () => {
     interface IAuthData {
@@ -14,15 +15,9 @@ const useAuth = () => {
     useEffect(() => {
         async function fetchAuthStatus() {
             try {
-                const res = await fetch(`${AUTH_SERVER}/is-authenticated`, {
-                    method: 'GET',
-                    headers: { "Content-Type": "application/json" },
-                    mode: 'cors',
-                    credentials: 'include'
-                })
+                const res = await fetch(`${AUTH_SERVER}/is-authenticated`, genFetchOpts("GET"));
                 const data: IAuthData = await res.json();
-                if (data["errMssg"]) setError(data.errMssg);
-                else setIsAuthenticated(data.authenticated)
+                setIsAuthenticated(data.authenticated)
             }
             catch (err) {
                 setError((err as Error).message);
