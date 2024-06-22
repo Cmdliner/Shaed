@@ -3,6 +3,7 @@ export interface IFetchData {
     authenticated?: boolean;
     /* Room data */
     rooms?: any[];
+    currentUser?: string;
     mssg?: string;
     username?: string;
     room_name: string;

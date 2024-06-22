@@ -21,13 +21,13 @@ const App = () => {
 
                 {/* Room routes */}
                 <Route path="/rooms" element={<RoomLayout />} >
-                    <Route path="/rooms/" element={<ProtectedRoute><Rooms /></ProtectedRoute>} />
-                    <Route path="/rooms/:roomID/chat" element={<ProtectedRoute><ChatRoom /></ProtectedRoute>} />
-                    <Route path="/rooms/:roomID/join" element={<ProtectedRoute><JoinRoom /></ProtectedRoute>} />
-                    <Route path="/rooms/:roomID/leave" element={<ProtectedRoute><LeaveRoom /></ProtectedRoute>} />
+                    <Route path="/rooms/" element={<ProtectedRoute children={<Rooms />} />} />
+                    <Route path="/rooms/:roomID/chat" element={<ProtectedRoute children={<ChatRoom />} />} />
+                    <Route path="/rooms/:roomID/join" element={<ProtectedRoute children={<JoinRoom />} />} />
+                    <Route path="/rooms/:roomID/leave" element={<ProtectedRoute children={<LeaveRoom />} />} />
                     <Route path="/rooms/*" element={<ErrorPage />} />
                 </Route>
-
+                
 
                 {/* Default routes */}
                 <Route path="/" element={<RootLayout />}>
@@ -35,7 +35,7 @@ const App = () => {
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<SignIn />} />
                     <Route path="/logout" element={<Logout />} />
-                    <Route path="/create-room" element={<CreateRoom />} />
+                    <Route path="/create-room" element={<ProtectedRoute children={<CreateRoom />} />} />
                     <Route path="/" element={<Home />} />
                     <Route path="*" element={<ErrorPage />} />
                 </Route>

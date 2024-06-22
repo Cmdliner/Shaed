@@ -1,18 +1,19 @@
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AUTH_SERVER } from "../../utils/env_alias";
-import ErrorList from "../../components/ErrorList";
 import useFetchOnAction from "../../utils/useFetchOnAction";
 import { genFetchOpts } from "../../utils/fetch_options";
+import ErrorInfo from "../../components/ErrorInfo";
 
 interface ILoginData {
     mssg?: string;
     errMssg?: string
 }
+
 const SignIn = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [errors, setErrors] = useState<string[]>([]);
+    const [err, setError] = useState("");
     const navigate = useNavigate();
     const serializedBody = JSON.stringify({ username, password });
     
@@ -24,11 +25,11 @@ const SignIn = () => {
             onSuccess: (data) => {
                 if(!data["errMssg"]) navigate("/rooms")
             },
-            onError: (err) => setErrors([...errors, err.message])
+            onError: (err) => setError(err.message)
         },
     );
     if(error) {
-        setErrors([...errors, error.message])
+        setError(error.message)
         reset();
     }
 
@@ -42,7 +43,7 @@ const SignIn = () => {
             <section className="pt-[8rem] min-h-screen">
                 <h1 className="text-3xl font-bold text-center mb-[4rem]">Sign-In</h1>
                 <form className=" w-[80%] md:w-[700px] mx-auto flex flex-col" onSubmit={(e) => handleSubmit(e)}>
-                    {errors && <ErrorList errors={errors} />}
+                    {err && <ErrorInfo error={err} />}
                     <div className="mb-[2rem]">
                         <label className="input input-bordered flex items-center gap-2 mb-5">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>

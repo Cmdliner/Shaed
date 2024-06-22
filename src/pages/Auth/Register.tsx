@@ -20,7 +20,7 @@ const Register = () => {
                 if(!data["errMssg"]) navigate("/create-room");
             },
             onError: (error) => {
-                setErrors([...errors, error.message]);
+                setErr(error.message);
             }
         });
 

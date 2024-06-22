@@ -46,11 +46,13 @@ const ChatRoom = () => {
     const [messages, setMessages] = useState<IMessageStructure[]>();
     const [currentUser, setCurrentUser] = useState("");
     const [err, setErr] = useState<string>("");
-    const [fetchRoomInfo, { isLoading, error }, _] = useFetchOnAction(`${API_SERVER}/rooms/${roomID}/messages`, {
+    const [fetchRoomInfo, { isLoading, error }, reset] = useFetchOnAction(`${API_SERVER}/rooms/${roomID}/messages`, {
         ...(genFetchOpts("GET")),
         onSuccess: (data: { messages: Array<IMessageStructure>, currentUser: string }) => {
             setMessages(data.messages);
             setCurrentUser(data.currentUser);
+            messagesRef.current && messagesRef.current.lastElementChild?.scrollIntoView({behavior: 'smooth'});
+            reset();
         },
         onError: (er) => {
             setErr(er.message);
