@@ -13,7 +13,7 @@ const OtherChat: FC<IChatProps> = ({text, username, createdAt}) => {
                     </div>
                 </div>
                 <div className="chat-header">
-                    <time className="text-xs opacity-50">{new Date(createdAt).toUTCString()}</time>
+                    <time className="text-xs opacity-50">{new Date(createdAt).toLocaleTimeString()}</time>
                 </div>
                 <div className="chat-bubble">{text}</div>
                 <p className="text-[0.75rem]">{username}</p>

@@ -8,11 +8,11 @@ import { useNavigate } from "react-router-dom";
 const Logout = () => {
     const [shouldFetch, setShouldFetch] = useState(false);
     const navigate = useNavigate();
-    const [data, loading, err] = useFetch(`${AUTH_SERVER}/register/logout`, genFetchOpts('POST', ''), shouldFetch);
+    const [data, _loading, _err] = useFetch(`${AUTH_SERVER}/register/logout`, genFetchOpts('POST', ''), shouldFetch);
     function handleLogout(e: FormEvent) {
         e.preventDefault();
         setShouldFetch(true);
-        if(!data?.['errMssg']){console.log(data?.["mssg"]); navigate("/")};
+        if(!data?.['errMssg'] && data?.['mssg']){console.log(data?.["mssg"]); navigate("/")};
     }
     const myModalRef = useRef<HTMLDialogElement>(null);
     return (
