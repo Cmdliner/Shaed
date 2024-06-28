@@ -20,7 +20,6 @@ const App = () => {
 
                 {/* Room routes */}
                 <Route path="/rooms" element={<RoomLayout />} >
-                    <Route path="/rooms/" element={<ProtectedRoute children={<Rooms />} />} />
                     <Route path="/rooms/:roomID/chat" element={<ProtectedRoute children={<ChatRoom />} />} />
                     <Route path="/rooms/:roomID/join" element={<ProtectedRoute children={<JoinRoom />} />} />
                     <Route path="/rooms/:roomID/leave" element={<ProtectedRoute children={<LeaveRoom />} />} />
@@ -31,6 +30,7 @@ const App = () => {
                 {/* Default routes */}
                 <Route path="/" element={<RootLayout />}>
                     <Route path="/" element={<Home />} />
+                    <Route path="/rooms/" element={<ProtectedRoute children={<Rooms />} />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<SignIn />} />
                     <Route path="/create-room" element={<ProtectedRoute children={<CreateRoom />} />} />

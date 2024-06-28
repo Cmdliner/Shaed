@@ -15,7 +15,6 @@ const useAuth = () => {
     useEffect(() => {
         async function fetchAuthStatus() {
             try {
-                console.log("Auth Server -> ", AUTH_SERVER)
                 const res = await fetch(`${AUTH_SERVER}/is-authenticated`, genFetchOpts("GET"));
                 const data: IAuthData = await res.json();
                 setIsAuthenticated(data.authenticated)

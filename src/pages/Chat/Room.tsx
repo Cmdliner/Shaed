@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER } from "../../utils/env_alias";
 import { genFetchOpts } from "../../utils/fetch_options";
 import { useState, useEffect, FormEvent, useRef } from "react";
@@ -24,14 +24,18 @@ const ChatRoom = () => {
     const [messages, setMessages] = useState<IMessageStructure[]>();
     const [currentUser, setCurrentUser] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [err, setErr] = useState<string>("");
+    const [err, setErr] = useState("");
+    const navigate = useNavigate();
 
     async function fetchMessages() {
         setIsLoading(true);
         try {
             const res = await fetch(`${API_SERVER}/rooms/${roomID}/messages`, genFetchOpts('GET'));
+            if(res.status === 401) return navigate(`/rooms/${roomID}/join`);
             const data = await res.json();
-            if(data?.['errMssg']) throw new Error(data?.['errMssg']);
+            if(data?.['errMssg']) {
+                 throw new Error(data?.['errMssg']);
+            }
             setCurrentUser(data?.['currentUser']);
             setMessages(data?.['messages']);
             messagesRef.current && messagesRef.current.lastElementChild?.scrollIntoView({behavior: 'smooth'});

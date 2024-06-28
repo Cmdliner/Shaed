@@ -3,6 +3,7 @@ import { API_SERVER } from "../utils/env_alias";
 import { useState, useEffect } from "react";
 import RoomHeader from "../components/RoomHeader";
 import ErrorInfo from "../components/ErrorInfo";
+import RoomSkeleton from "../pages/Chat/RoomSkeleton";
 
 const RoomLayout = () => {
     const [error, setError] = useState("");
@@ -45,7 +46,7 @@ const RoomLayout = () => {
                 <aside className="hidden md:block border-r border-black p-4 h-screen overflow-y-auto">
                     <Link to="/" className="text-3xl">Shaed</Link>
                     <hr />
-                    {isLoading && <div>Loading...</div>}
+                    {isLoading && <RoomSkeleton/>}
                     {error && <ErrorInfo error={error} />}
                     {(rooms && rooms.length > 0) && rooms.map((room: any) => (
                         <div key={room._id!}>
