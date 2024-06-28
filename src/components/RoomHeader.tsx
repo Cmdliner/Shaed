@@ -1,7 +1,7 @@
 import { FormEvent } from "react";
 import { useEffect, useState } from "react";
 import { BiLogOut } from "react-icons/bi";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER, AUTH_SERVER } from "../utils/env_alias";
 import { genFetchOpts } from "../utils/fetch_options";
 

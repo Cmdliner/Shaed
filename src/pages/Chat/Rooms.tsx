@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { API_SERVER } from "../../utils/env_alias";
 import { genFetchOpts } from "../../utils/fetch_options";
+import ErrorInfo from "../../components/ErrorInfo";
 
 const Rooms = () => {
     const [error, setError] = useState('');
@@ -27,6 +28,7 @@ const Rooms = () => {
 
     return ( 
         <div className="min-h-screen pt-[3rem]">
+        {error && <ErrorInfo error={error}/>}
         <h1 className="text-3xl">All Rooms</h1>
             <input type="search" onChange={(e) => setSearchParams('name', {replace: true, state: e.target.value})} />
             {rooms && rooms.length === 0 ? <div>No rooms yet :(</div> : <div>
