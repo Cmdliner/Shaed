@@ -1,5 +1,6 @@
 import { FC, FormEvent } from "react";
-import { BiSend } from "react-icons/bi";
+import { FaPaperPlane, FaSmile, FaPaperclip } from 'react-icons/fa';
+
 
 interface IMessageFormProps {
     handleSend: (e: FormEvent) => void;
@@ -10,14 +11,26 @@ const MessageForm: FC<IMessageFormProps> = ({ mssg, handleSend, setMssg }) => {
 
     return (
         <>
-            <form className="flex flex-col m-auto" id="write" onSubmit={(e) => handleSend(e)}>
-                <div className="mb-[2rem] fixed bottom-0 min-w-[30%] self-center z-[9999] flex">
-                    <label className="w-full input input-bordered flex gap-2">
-                        <input type="text" className="grow" placeholder="Message..." value={mssg} onChange={(e) => setMssg(e.target.value)} />
-                        <button><BiSend /></button>
-                    </label>
-                </div>
-            </form>
+             <div className="p-4 fixed bottom-0 w-full bg-base-300">
+                <form className="flex items-center space-x-2" onSubmit={(e) => handleSend(e)}>
+                <button type="button" className="btn btn-circle btn-ghost">
+                    <FaSmile className="text-xl" />
+                </button>
+                <input 
+                    type="text" 
+                    placeholder="Type a message..." 
+                    className="input input-bordered flex-grow"
+                    value={mssg} onChange={(e) => setMssg(e.target.value)}
+                />
+                <button type="button" className="btn btn-circle btn-ghost">
+                    <FaPaperclip className="text-xl" />
+                </button>
+                <button type="submit" className="btn btn-circle btn-primary">
+                    <FaPaperPlane className="text-xl" />
+                </button>
+                </form>
+      </div>
+            
         </>
     );
 }

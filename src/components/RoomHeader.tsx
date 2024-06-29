@@ -1,9 +1,11 @@
 import { FormEvent } from "react";
 import { useEffect, useState } from "react";
-import { BiLogOut } from "react-icons/bi";
+import { FaArrowLeft, FaEllipsisV } from 'react-icons/fa';
 import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER, AUTH_SERVER } from "../utils/env_alias";
 import { genFetchOpts } from "../utils/fetch_options";
+import { FaUserGroup } from "react-icons/fa6";
+import { LuGroup } from "react-icons/lu";
 
 const RoomHeader = () => {
   const { roomID } = useParams();
@@ -67,53 +69,45 @@ const RoomHeader = () => {
 
   return (
     <>
-      <div className="navbar bg-base-100 justify-between">
+
         {isLoading ? (
           <p>Loading..</p>
         ) : (
-          <>
-            <div className="flex flex-col">
-              <div className="text-xl text-bold">{roomName}</div>
-              <p>
-                Created by <span>{hostName}</span>
-              </p>
-            </div>
-            <div className="flex-none dropdown dropdown-end">
-              <button className="btn btn-square btn-ghost">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  className="inline-block w-5 h-5 stroke-current"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-                  ></path>
-                </svg>
+          <div className="navbar bg-base-300 sticky top-0 z-10 shadow-md">
+            <div className="flex-none">
+              <button className="btn btn-square btn-ghost" onClick={() => navigate(-1)}>
+                <FaArrowLeft className="text-xl" />
               </button>
-              <ul
-                tabIndex={0}
-                className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52 mt-4"
-              >
-                <li>
-                  <a>Room Info </a>
-                </li>
-                <li>
-                  <div onClick={(e) => leaveRoom(e)}>Leave room </div>
-                </li>
-                <li>
-                  <a onClick={(e) => logout(e)}>
-                    <BiLogOut /> Logout
-                  </a>
-                </li>
-              </ul>
             </div>
-          </>
+            <div className="flex-1">
+              <div className="flex items-center space-x-3">
+                <div className="avatar">
+                  <div className="w-10 rounded-full border ">
+                    <FaUserGroup className="w-[100%] "/>
+                  </div>
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold">{roomName} created by {hostName}</h2>
+                  <p className="text-sm text-base-content/70">3 participants</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex-none">
+              <div className="dropdown dropdown-end">
+                <label tabIndex={0} className="btn btn-ghost btn-circle">
+                  <FaEllipsisV className="text-xl" />
+                </label>
+                <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
+                  <li><a>Room Info</a></li>
+                  <li><a>Search</a></li>
+                  <li><a>Mute Notifications</a></li>
+                  <li><a className="text-error" onClick={(e) => leaveRoom(e)}>Leave Room</a></li>
+                </ul>
+              </div>
+            </div>
+    </div>
         )}
-      </div>
+
     </>
   );
 };

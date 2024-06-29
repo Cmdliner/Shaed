@@ -6,11 +6,11 @@ import Register from "./pages/Auth/Register";
 import SignIn from "./pages/Auth/SignIn";
 import Rooms from "./pages/Chat/Rooms";
 import ProtectedRoute from "./pages/Auth/Protected";
-import RoomLayout from "./Layout/RoomLayout";
 import LeaveRoom from "./pages/Chat/LeaveRoom";
 import ChatRoom from "./pages/Chat/Room";
 import JoinRoom from "./pages/Chat/JoinRoom";
 import CreateRoom from "./pages/Chat/CreateRoom";
+import AvailableRooms from "./pages/Chat/AvailableRooms";
 
 const App = () => {
 
@@ -19,12 +19,9 @@ const App = () => {
             <Routes>
 
                 {/* Room routes */}
-                <Route path="/rooms" element={<RoomLayout />} >
                     <Route path="/rooms/:roomID/chat" element={<ProtectedRoute children={<ChatRoom />} />} />
                     <Route path="/rooms/:roomID/join" element={<ProtectedRoute children={<JoinRoom />} />} />
                     <Route path="/rooms/:roomID/leave" element={<ProtectedRoute children={<LeaveRoom />} />} />
-                    <Route path="/rooms/*" element={<ErrorPage />} />
-                </Route>
                 
 
                 {/* Default routes */}
@@ -38,6 +35,8 @@ const App = () => {
                     <Route path="*" element={<ErrorPage />} />
                 </Route>
 
+                {/* Test */}
+                <Route path="/available-rooms" element={<AvailableRooms />} />
 
             </Routes>
         </Router>

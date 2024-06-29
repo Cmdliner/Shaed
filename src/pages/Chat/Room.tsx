@@ -6,6 +6,7 @@ import ErrorInfo from "../../components/ErrorInfo";
 import MyChat from "./MyChat";
 import OtherChat from "./OtherChat";
 import MessageForm from "../../components/SendMssg";
+import RoomHeader from "../../components/RoomHeader";
 
 interface ISender {
     username: string;
@@ -70,19 +71,25 @@ const ChatRoom = () => {
     }, [])
 
     return (
-
-        <div>
+        <>
+            <div className="flex flex-col h-screen bg-base-200">
+            <RoomHeader />
+            <div>
             {isLoading && <div> Loading... </div>}
             {err && <ErrorInfo error={err} />}
-            {messages && <div className="mb-20" ref={messagesRef}>
+            {messages && <div className="mb-[5rem]" ref={messagesRef}>
+                <div className="flex-grow overflow-y-auto p-4 space-y-4">
                 {messages.map((mssg: IMessageStructure, index: number) => (
                     (mssg.sender?.username || "") === currentUser ?
-                        <MyChat text={mssg.text} key={index.toString()} username={mssg.sender?.username || "[non]"} createdAt={mssg.createdAt} /> :
+                        <MyChat text={mssg.text} key={index.toString()} username={mssg.sender?.username || "[non]"} createdAt={mssg.createdAt} /> : 
                         <OtherChat text={mssg.text} key={index.toString()} username={mssg.sender?.username || "[non]"} createdAt={mssg.createdAt} />
                 ))}
-                <MessageForm mssg={mssg} handleSend={(e: FormEvent) => sendMessage(e)} setMssg={setMssg}/>
+                </div>
             </div>}
-        </div>
+            </div>
+            </div>
+        <MessageForm mssg={mssg} handleSend={(e: FormEvent) => sendMessage(e)} setMssg={setMssg}/>
+        </>
     );
 }
 
