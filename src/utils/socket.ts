@@ -1,7 +1,19 @@
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
-const URL = process.env.NODE_ENV! == 'production' ? undefined : 'http://localhost:4000';
-export const socket = io(URL!, {autoConnect: true}); 
+let socket: Socket;
+
+const URL = import.meta.env.VITE_CHAT_SERVER_URI;
+export const initSocket = () => {
+    socket = io(URL);
+    return socket;
+}
+
+export const getSocket = () => {
+    if(!socket) {
+        throw new Error('Socket not initialized!');
+    }
+    return socket;
+}
 
 
 
