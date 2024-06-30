@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Footer = () => {
     return (
         <footer className="footer footer-center p-10 bg-base-200 text-base-content rounded">
@@ -15,6 +17,7 @@ const Footer = () => {
                 </div>
             </nav>
             <aside>
+                <span>See attributions <Link to="/attributions">here</Link></span>
                 <p>Copyright © 2024 - All right reserved Shaed</p>
             </aside>
         </footer>

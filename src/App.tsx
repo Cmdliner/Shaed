@@ -11,6 +11,7 @@ import ChatRoom from "./pages/Chat/Room";
 import JoinRoom from "./pages/Chat/JoinRoom";
 import CreateRoom from "./pages/Chat/CreateRoom";
 import AvailableRooms from "./pages/Chat/AvailableRooms";
+import Attributions from "./pages/Attributions";
 
 const App = () => {
 
@@ -30,6 +31,7 @@ const App = () => {
                     <Route path="/rooms/" element={<ProtectedRoute children={<Rooms />} />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<SignIn />} />
+                    <Route path="/attributions" element={<Attributions />} />
                     <Route path="/create-room" element={<ProtectedRoute children={<CreateRoom />} />} />
                     <Route path="/" element={<Home />} />
                     <Route path="*" element={<ErrorPage />} />
