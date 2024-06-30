@@ -1,5 +1,5 @@
 import { FC, FormEvent } from "react";
-import { FaPaperPlane, FaSmile, FaPaperclip } from 'react-icons/fa';
+import { FaPaperPlane } from 'react-icons/fa';
 
 
 interface IMessageFormProps {
