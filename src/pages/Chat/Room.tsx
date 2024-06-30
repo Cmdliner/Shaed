@@ -45,7 +45,7 @@ const ChatRoom = () => {
             }
             setCurrentUser(data?.['currentUser']);
             setMessages(data?.['messages']);
-            setTimeout(scrollToBottom, 100); // Scroll after render
+            scrollToBottom();
         } catch (error) {
             console.error(error);
             setErr((error as Error).message);

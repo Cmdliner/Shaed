@@ -2,10 +2,9 @@ import { FormEvent } from "react";
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaEllipsisV } from 'react-icons/fa';
 import { useNavigate, useParams } from "react-router-dom";
-import { API_SERVER, AUTH_SERVER } from "../utils/env_alias";
+import { API_SERVER } from "../utils/env_alias";
 import { genFetchOpts } from "../utils/fetch_options";
 import { FaUserGroup } from "react-icons/fa6";
-import { LuGroup } from "react-icons/lu";
 
 const RoomHeader = () => {
   const { roomID } = useParams();
@@ -14,20 +13,6 @@ const RoomHeader = () => {
   const [hostName, setHostName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  async function logout(e: FormEvent) {
-    e.preventDefault();
-    try {
-      const res = await fetch(`${AUTH_SERVER}/logout`, genFetchOpts("POST"));
-      const data = await res.json();
-      if (data?.["errMssg"]) console.error(data?.["errMssg"]);
-      else {
-        console.log(data?.["mssg"]);
-        navigate("/");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
   async function roomInfo() {
     setIsLoading(true);
     try {

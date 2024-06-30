@@ -34,7 +34,7 @@ const RoomLayout = () => {
             } finally {
                 setIsLoading(false);
             }
-        };
+        }
         fetchRooms();
 
     }, []);
