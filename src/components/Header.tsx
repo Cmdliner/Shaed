@@ -1,9 +1,44 @@
 import { BsFillChatDotsFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
-import useAuth from "../utils/useAuth";
+import { Link, useNavigate } from "react-router-dom";
 import login_pic from "../assets/login_display.jpg"
+import { useEffect, useState } from "react";
+import { AUTH_SERVER } from "../utils/env_alias";
+import { genFetchOpts } from "../utils/fetch_options";
+
 const Header: React.FC = () => {
-    const [ isAuthenticated, isLoading, _error ] = useAuth();
+
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
+
+    useEffect(() => { 
+        async function getAuthState() {
+            try{
+                const res = await fetch(`${AUTH_SERVER}/is-authenticated`, genFetchOpts("GET"));
+                const data = await res.json();
+                if(data?.authenticated) setIsAuthenticated(data?.authenticated);
+            } catch(error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        getAuthState();
+    }, []);
+
+    async function handleLogout() {
+        try {
+            const res = await fetch(`${AUTH_SERVER}/logout`, genFetchOpts("POST"));
+            const data = await res.json();
+            if(data?.mssg) {
+                navigate('/available-rooms');
+            }
+            if(data?.errMssg) throw new Error(data?.errMssg);
+        } catch (error) {
+            console.error(error);
+            alert((error as Error).message);
+        }
+    }
     return (
         <header className="navbar bg-base-100 fixed z-[9999]">
             <div className="navbar bg-base-100">
@@ -24,17 +59,14 @@ const Header: React.FC = () => {
                             </div>
                         </Link></li>
                         {!isLoading && !isAuthenticated ? <li><Link to="/register">Register</Link></li>: 
-                        <li><Link to="/logout">Logout</Link></li>
+                        <li><button onClick={handleLogout}>Logout</button></li>
                     }
                     </ul>
                 </div>
             </div>
             <div className="navbar-end hidden lg:flex">
-                <ul className="menu menu-horizontal px-1 gap-[.6em]"> 
+                <ul className="menu menu-horizontal items-center px-1 gap-[.6em]"> 
                     <li><Link to="/create-room">Create Room</Link></li>
-                    {!isLoading && !isAuthenticated ? <li><Link to="/register">Register</Link></li>: 
-                        <li><Link to="/logout">Logout</Link></li>
-                    }
                     <li>
                         <Link to="/rooms">
                             <div className="indicator">
@@ -43,11 +75,21 @@ const Header: React.FC = () => {
                             </div>
                         </Link>
                     </li>
-                    <li>
-                        <div className="image w-[4rem] rounded border border-r-[50%]" >
-                            <img src={login_pic} alt="Default Profile"  className="container`"/>
-                        </div>
-                    </li>
+                    {!isLoading && !isAuthenticated ? <li><Link to="/register">Register</Link></li>:
+
+                        <>
+                            <li><button onClick={handleLogout}>Logout</button></li>
+                            <li>
+                            <div className="avatar ">
+                                <div className="ring-primary ring-offset-base-100 w-8 rounded-full ring ring-offset-2">
+                                    <img src={login_pic} />
+                                </div>
+                            </div>
+                            </li>
+                        </>
+                    }
+                    
+                    
                 </ul>
 
             </div>

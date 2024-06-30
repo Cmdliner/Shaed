@@ -22,7 +22,7 @@ const MessageForm: FC<IMessageFormProps> = ({ mssg, handleSend, setMssg }) => {
                     className="input input-bordered flex-grow"
                     value={mssg} onChange={(e) => setMssg(e.target.value)}
                 />
-                <button type="button" className="btn btn-circle btn-ghost">
+                <button type="button" className=" hidden md:block btn btn-circle btn-ghost">
                     <FaPaperclip className="text-xl" />
                 </button>
                 <button type="submit" className="btn btn-circle btn-primary">
