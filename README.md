@@ -1,5 +1,6 @@
 # SHAED (An anonymous chat application)
 
 ## TODO
-- Create RoomHeader loader Skeleton && Rooms loader skeleton
-- Use AvailableRoom in `/rooms`
+- Add Mesage Delete Actions
+- add illustration image to error page
+- Check token expire and delete cookie
