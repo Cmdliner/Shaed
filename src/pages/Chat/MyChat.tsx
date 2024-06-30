@@ -13,7 +13,7 @@ const MyChat: FC<IChatProps> = ({ username, text, createdAt }) => {
                 {username}
                 <time className="text-xs opacity-50 ml-1">{new Date(createdAt).toLocaleTimeString()}</time>
             </div>
-            <div className="chat-bubble chat-bubble-primary">{text}</div>
+            <div className="chat-bubble chat-bubble-primary text-sm md:text-[1rem]">{text}</div>
         </div>
     );
 }
