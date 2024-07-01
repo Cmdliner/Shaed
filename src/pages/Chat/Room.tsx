@@ -29,10 +29,11 @@ const ChatRoom = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [err, setErr] = useState("");
     const navigate = useNavigate();
-
-    const scrollToBottom = () => {
+    
+    useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
+    }, [roomID, messages])
+        
 
     const fetchMessages = useCallback(async () => {
         setIsLoading(true);
@@ -45,7 +46,6 @@ const ChatRoom = () => {
             }
             setCurrentUser(data?.['currentUser']);
             setMessages(data?.['messages']);
-            scrollToBottom();
         } catch (error) {
             console.error(error);
             setErr((error as Error).message);
