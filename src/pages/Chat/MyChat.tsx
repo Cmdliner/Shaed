@@ -1,12 +1,14 @@
 import { FC } from "react";
 import { IChatProps } from "../../interfaces/ChatProps";
+import my_pic from "../assets/login_display.jpg"
+
 
 const MyChat: FC<IChatProps> = ({ username, text, createdAt }) => {
     return (
         <div className="chat chat-end">
             <div className="chat-image avatar">
                 <div className="w-8 h-8 rounded-full">
-                    <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" alt="User avatar" />
+                    <img src={my_pic} alt="User avatar" />
                 </div>
             </div>
             <div className="chat-header mb-1">

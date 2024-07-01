@@ -23,7 +23,7 @@ const Rooms = () => {
   const fetchRooms = useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${API_SERVER}/rooms`, genFetchOpts("GET"));
+      const res = await fetch(`${API_SERVER}/user/rooms`, genFetchOpts("GET"));
       const data = await res.json();
       if (data["errMssg"]) throw new Error(data["errMssg"]);
       setRooms(data?.rooms);
