@@ -21,6 +21,7 @@ const useAuth = () => {
             }
             catch (err) {
                 setError((err as Error).message);
+                setIsAuthenticated(false);
             }
             finally {
                 setIsLoading(false);
