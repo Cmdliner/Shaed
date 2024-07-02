@@ -28,7 +28,6 @@ const ChatRoom = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [err, setErr] = useState("");
     const navigate = useNavigate();
-    let authHeader: object | null = null;
     let fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
     if(localStorage.getItem('Authorization')) {
         fetchHeaders = {

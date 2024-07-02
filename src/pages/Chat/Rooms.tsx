@@ -79,7 +79,10 @@ const Rooms = () => {
           <span className="loading loading-spinner loading-lg"></span>
         </div>
       ) : rooms.length === 0 ? (
-        <div className="text-center text-lg">No rooms found. Create one to get started!</div>
+        <div className="flex flex-col">
+          <div className="text-center text-lg">No rooms found. Create one to get started!</div>
+          <div className='mt-8 btn btn-primary self-center'>Create Room</div>
+        </div>
       ) : (
         <motion.ul 
           className="space-y-4"
