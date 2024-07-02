@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER } from "../../utils/env_alias";
-import { genFetchOpts } from "../../utils/fetch_options";
 import { useState, useEffect, FormEvent, useRef, useCallback } from "react";
 import ErrorInfo from "../../components/ErrorInfo";
 import MyChat from "./MyChat";
@@ -29,7 +28,14 @@ const ChatRoom = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [err, setErr] = useState("");
     const navigate = useNavigate();
-    
+    let authHeader: object | null = null;
+    let fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
+    if(localStorage.getItem('Authorization')) {
+        fetchHeaders = {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('Authorization')}`
+        }
+    }
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [roomID, messages])
@@ -38,7 +44,12 @@ const ChatRoom = () => {
     const fetchMessages = useCallback(async () => {
         setIsLoading(true);
         try {
-            const res = await fetch(`${API_SERVER}/rooms/${roomID}/messages`, genFetchOpts('GET'));
+            const res = await fetch(`${API_SERVER}/rooms/${roomID}/messages`, {
+                method: 'GET',
+                headers: fetchHeaders,
+                mode: 'cors',
+                credentials: 'include',
+            });
             if (res.status === 401) return navigate(`/rooms/${roomID}/join`);
             const data = await res.json();
             if (data?.['errMssg']) {
@@ -58,7 +69,13 @@ const ChatRoom = () => {
         e.preventDefault();
         if (!mssg.trim()) return; // Doesn't send empty messages
         try {
-            const res = await fetch(`${API_SERVER}/rooms/${roomID}/send`, genFetchOpts('POST', JSON.stringify({ content: mssg })));
+            const res = await fetch(`${API_SERVER}/rooms/${roomID}/send`, {
+                method: 'POST',
+                headers: fetchHeaders,
+                mode: 'cors',
+                credentials: 'include',
+                body: JSON.stringify({ content: mssg })
+            });
             const data = await res.json();
             if (data?.['errMssg']) throw new Error(data?.['errMssg']);
             

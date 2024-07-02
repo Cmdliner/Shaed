@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { API_SERVER } from "../../utils/env_alias";
-import { genFetchOpts } from "../../utils/fetch_options";
 import ErrorInfo from "../../components/ErrorInfo";
 import { FaUser, FaDoorOpen } from "react-icons/fa";
 import { motion } from "framer-motion";
@@ -20,10 +19,22 @@ const Rooms = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  let fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
+  if(localStorage.getItem('Authorization')) {
+      fetchHeaders = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('Authorization')}`
+      }
+  }
   const fetchRooms = useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${API_SERVER}/user/rooms`, genFetchOpts("GET"));
+      const res = await fetch(`${API_SERVER}/user/rooms`, {
+        method: 'GET',
+        headers: fetchHeaders,
+        mode: 'cors',
+        credentials: 'include'
+      });
       const data = await res.json();
       if (data["errMssg"]) throw new Error(data["errMssg"]);
       setRooms(data?.rooms);

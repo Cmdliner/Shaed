@@ -2,7 +2,6 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { FcCancel } from "react-icons/fc";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER } from "../../utils/env_alias";
-import { genFetchOpts } from "../../utils/fetch_options";
 
 const JoinRoom = () => {
     const {roomID} = useParams();
@@ -10,9 +9,21 @@ const JoinRoom = () => {
     const [roomName, setRoomName] = useState('');
     const [host, setHost] = useState('');
     const myModalRef = useRef<HTMLDialogElement>(null);
+    let fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
+    if(localStorage.getItem('Authorization')) {
+        fetchHeaders = {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('Authorization')}`
+        }
+    }
     async function getRoomInfo() {
         try {
-            const res = await fetch(`${API_SERVER}/rooms/${roomID}/info`, genFetchOpts('GET'));
+            const res = await fetch(`${API_SERVER}/rooms/${roomID}/info`, {
+                method: 'GET',
+                headers: fetchHeaders,
+                mode: 'cors',
+                credentials: 'include'
+            });
             const roomInfo = await res.json();
             if(roomInfo?.['errMssg']) throw new Error(roomInfo?.['errMssg']);
             setRoomName(roomInfo?.['name']);
@@ -25,7 +36,12 @@ const JoinRoom = () => {
     async function handleJoinRoom(e: FormEvent) {
         e.preventDefault();
         try {
-            const res = await fetch(`${API_SERVER}/rooms/${roomID}/join`, genFetchOpts('POST'));
+            const res = await fetch(`${API_SERVER}/rooms/${roomID}/join`, {
+                method: 'POST',
+                headers: fetchHeaders,
+                mode: 'cors',
+                credentials: 'include'
+            });
             const data = await res.json();
             if(data?.['errMssg']) throw new Error(data?.['errMssg']);
             navigate(`/rooms/${roomID}/chat`);

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { IChatProps } from "../../interfaces/ChatProps";
-import my_pic from "../assets/login_display.jpg"
+import my_pic from "../../assets/login_display.jpg"
 
 
 const MyChat: FC<IChatProps> = ({ username, text, createdAt }) => {

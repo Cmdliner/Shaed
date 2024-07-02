@@ -1,6 +1,5 @@
 import { AUTH_SERVER } from "./env_alias";
 import { useState, useEffect } from "react";
-import { genFetchOpts } from "./fetch_options";
 
 const useAuth = () => {
     interface IAuthData {
@@ -12,10 +11,22 @@ const useAuth = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
 
+    let fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
+                if(localStorage.getItem('Authorization')) {
+                    fetchHeaders = {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem('Authorization')}`
+                    }
+                }
     useEffect(() => {
         async function fetchAuthStatus() {
             try {
-                const res = await fetch(`${AUTH_SERVER}/is-authenticated`, genFetchOpts("GET"));
+                const res = await fetch(`${AUTH_SERVER}/is-authenticated`, {
+                    method: 'GET',
+                    headers: fetchHeaders,
+                    mode: 'cors',
+                    credentials: 'include',
+                });
                 const data: IAuthData = await res.json();
                 setIsAuthenticated(data.authenticated)
             }

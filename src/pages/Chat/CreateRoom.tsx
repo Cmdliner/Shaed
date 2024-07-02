@@ -1,5 +1,4 @@
 import { FormEvent, useState } from "react";
-import { genFetchOpts } from "../../utils/fetch_options";
 import { BiChat } from "react-icons/bi";
 import useFetchOnAction from "../../utils/useFetchOnAction";
 import { API_SERVER } from "../../utils/env_alias";
@@ -11,7 +10,20 @@ const CreateRoom = () => {
     const navigate = useNavigate();
     const [roomName, setRoomName] = useState("");
     const [errorMssg, setErrorMssg] = useState("");
-    const roomFetchOpts = genFetchOpts("POST", JSON.stringify({ name: roomName }));
+    let fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
+    if(localStorage.getItem('Authorization')) {
+        fetchHeaders = {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('Authorization')}`
+        }
+    }
+    const roomFetchOpts: RequestInit = {
+        method: 'POST',
+        headers: fetchHeaders,
+        mode: 'cors',
+        credentials: 'include',
+        body: JSON.stringify({ name: roomName })
+    }
     const [createRoom, { error, isLoading }, reset] = useFetchOnAction(`${API_SERVER}/rooms/create`, {
         ...roomFetchOpts,
         onSuccess: (data) => {

@@ -1,41 +1,46 @@
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AUTH_SERVER } from "../../utils/env_alias";
-import useFetchOnAction from "../../utils/useFetchOnAction";
-import { genFetchOpts } from "../../utils/fetch_options";
 import ErrorInfo from "../../components/ErrorInfo";
 
-interface ILoginData {
-    mssg?: string;
-    errMssg?: string
-}
+
 
 const SignIn = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [err, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const serializedBody = JSON.stringify({ username, password });
+    const reqPayload = JSON.stringify({ username, password });
+    
     
 
-    const [login, {error, isLoading}, reset] = useFetchOnAction<ILoginData>(
-        `${AUTH_SERVER}/sign-in`,
-        {
-            ...(genFetchOpts('POST', serializedBody)),
-            onSuccess: (data) => {
-                if(!data["errMssg"]) navigate("/rooms")
-            },
-            onError: (err) => setError(err.message)
-        },
-    );
-    if(error) {
-        setError(error.message)
-        reset();
-    }
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
-        await login();
+        try {
+            const res =  await fetch(`${AUTH_SERVER}/sign-in`, {
+                method: 'POST',
+                headers: { "Content-Type": "application.json" },
+                mode: 'cors',
+                credentials: 'include',
+                body: reqPayload,
+            });
+            if(res.ok && res.status === 200) {
+                const authToken = res.headers.get('Authorization')?.split(' ')[1];
+                authToken && localStorage.setItem('Authorization', authToken);
+                navigate('/rooms');
+            }
+            const data = await res.json();
+            if(data['errMssg']) throw new Error(data['errMssg']);
+
+        } catch (error) {
+            console.error(error);
+            setError((error as Error).message);
+        }
+        finally {
+            setIsLoading(false);
+        }
     }
 
     return (

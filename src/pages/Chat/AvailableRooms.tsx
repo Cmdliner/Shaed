@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { FaSearch, FaSpinner } from 'react-icons/fa';
 import { API_SERVER } from '../../utils/env_alias';
-import { genFetchOpts } from "../../utils/fetch_options";
 
 interface Room {
   _id: string;
@@ -26,9 +25,21 @@ const AvailableRooms: React.FC = () => {
 
   const fetchRooms = async () => {
     setLoading(true);
+    let fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
+      if(localStorage.getItem('Authorization')) {
+          fetchHeaders = {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem('Authorization')}`
+          }
+      }
     try {
       const url = searchTerm ? `${API_SERVER}/rooms?name=${encodeURIComponent(searchTerm)}`: `${API_SERVER}/rooms`
-      const response = await fetch(url, genFetchOpts("GET"));
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: fetchHeaders,
+        mode: 'cors',
+        credentials: 'include'
+      });
       const data = await response.json();
       setRooms(data?.rooms);
     } catch (error) {

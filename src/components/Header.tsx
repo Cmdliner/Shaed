@@ -14,7 +14,20 @@ const Header: React.FC = () => {
     useEffect(() => { 
         async function getAuthState() {
             try{
-                const res = await fetch(`${AUTH_SERVER}/is-authenticated`, genFetchOpts("GET"));
+                let fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
+                if(localStorage.getItem('Authorization')) {
+                    fetchHeaders = {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem('Authorization')}`
+                    }
+                }
+                 
+                const res = await fetch(`${AUTH_SERVER}/is-authenticated`, {
+                    method: 'GET',
+                    headers: fetchHeaders,
+                    mode: 'cors',
+                    credentials: 'include'
+                } );
                 const data = await res.json();
                 if(data?.authenticated) setIsAuthenticated(data?.authenticated);
             } catch(error) {
@@ -26,18 +39,8 @@ const Header: React.FC = () => {
         getAuthState();
     }, []);
 
-    async function handleLogout() {
-        try {
-            const res = await fetch(`${AUTH_SERVER}/logout`, genFetchOpts("POST"));
-            const data = await res.json();
-            if(data?.mssg) {
-                navigate('/available-rooms');
-            }
-            if(data?.errMssg) throw new Error(data?.errMssg);
-        } catch (error) {
-            console.error(error);
-            alert((error as Error).message);
-        }
+    function handleLogout() {
+        localStorage.removeItem('Authorization');
     }
     return (
         <header className="navbar bg-base-100 fixed z-[9999]">

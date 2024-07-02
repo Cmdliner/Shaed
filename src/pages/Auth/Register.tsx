@@ -1,8 +1,6 @@
 import { FormEvent, useState } from "react";
 import { AUTH_SERVER } from "../../utils/env_alias";
 import { Link, useNavigate } from "react-router-dom";
-import useFetchonAction from "../../utils/useFetchOnAction";
-import { genFetchOpts } from "../../utils/fetch_options";
 import ErrorInfo from "../../components/ErrorInfo";
 
 const Register = () => {
@@ -10,24 +8,9 @@ const Register = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [err, setErr] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const ReqPayload = JSON.stringify({ username, password });
-    const [register, { error, isLoading }, reset] = useFetchonAction(
-        `${AUTH_SERVER}/register`, 
-        { 
-            ...(genFetchOpts('POST', ReqPayload)),
-            onSuccess: (data) => {
-                if(!data["errMssg"]) navigate("/create-room");
-            },
-            onError: (error) => {
-                setErr(error.message);
-            }
-        });
-
-        if(error) {
-            setErr(error.message)
-            reset();
-        }
+    const reqPayload = JSON.stringify({ username, password });
     
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
@@ -35,7 +18,30 @@ const Register = () => {
             setErr("Passwords don't match!");
             return;
         }
-        await register();
+        try {
+            setIsLoading(true);
+            const res = await fetch(`${AUTH_SERVER}/register`, {
+                method: 'POST',
+                mode: 'cors',
+                credentials: 'include',
+                headers: {"Content-Type": "application/json"},
+                body: reqPayload
+            });
+            if(res.ok && res.status == 201) {
+                const authToken = res.headers.get('Authorization')?.split(' ')[1];
+                authToken && localStorage.setItem('Authorization', authToken);
+                
+                navigate('/available-rooms');
+            }
+            const data = await res.json();
+            if(data['errMssg']) throw new Error(data['errMssg']);
+        }
+        catch(error) {
+            setErr((error as Error).message);
+        }
+        finally {
+            setIsLoading(false);
+        }
         
 
     }
