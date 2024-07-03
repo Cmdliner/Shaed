@@ -11,7 +11,7 @@ const SignIn = () => {
     const [err, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const reqPayload = JSON.stringify({ username, password });
+    const reqPayload = JSON.stringify({ username: username.trim(), password });
     
     
 
