@@ -1,5 +1,5 @@
 import { BsFillChatDotsFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import login_pic from "../assets/login_display.jpg"
 import { useEffect, useState } from "react";
 import { AUTH_SERVER } from "../utils/env_alias";
@@ -8,6 +8,7 @@ const Header: React.FC = () => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
     useEffect(() => { 
         async function getAuthState() {
             try{
@@ -34,10 +35,11 @@ const Header: React.FC = () => {
             }
         }
         getAuthState();
-    }, []);
+    }, [window.location.pathname]);
 
     function handleLogout() {
         localStorage.removeItem('Authorization');
+        navigate('/login');
     }
     return (
         <header className="navbar bg-base-100 fixed z-[9999]">

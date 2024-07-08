@@ -105,7 +105,7 @@ const Rooms = () => {
                   <div>
                     <h2 className="text-lg font-semibold">{room.name}</h2>
                     <p className="text-sm text-base-content/70 flex items-center">
-                      <FaUser className="mr-2" /> {room.host.username}
+                      <FaUser className="mr-2" /> {room.host?.username}
                     </p>
                   </div>
                 </div>

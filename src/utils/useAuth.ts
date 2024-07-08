@@ -12,12 +12,12 @@ const useAuth = () => {
     const [error, setError] = useState("");
 
     let fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
-                if(localStorage.getItem('Authorization')) {
-                    fetchHeaders = {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${localStorage.getItem('Authorization')}`
-                    }
-                }
+    if(localStorage.getItem('Authorization')) {
+        fetchHeaders = {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('Authorization')}`
+        }
+    }
     useEffect(() => {
         async function fetchAuthStatus() {
             try {
@@ -27,6 +27,7 @@ const useAuth = () => {
                     mode: 'cors',
                     credentials: 'include',
                 });
+
                 const data: IAuthData = await res.json();
                 setIsAuthenticated(data.authenticated)
             }

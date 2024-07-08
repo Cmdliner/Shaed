@@ -18,10 +18,17 @@ const SignIn = () => {
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
+        let fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
+        if(localStorage.getItem('Authorization')) {
+            fetchHeaders = {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('Authorization')}`
+            }
+        }
         try {
             const res =  await fetch(`${AUTH_SERVER}/sign-in`, {
                 method: 'POST',
-                headers: { "Content-Type": "application.json" },
+                headers: fetchHeaders,
                 mode: 'cors',
                 credentials: 'include',
                 body: reqPayload,
