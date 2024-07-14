@@ -3,26 +3,24 @@ import { useEffect, useState } from "react";
 import { FaArrowLeft, FaEllipsisV } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER } from "../utils/env_alias";
-import { genFetchOpts } from "../utils/fetch_options";
-import { FaUserGroup } from "react-icons/fa6";
-
+import RoomHeaderSkeleton from "./RoomHeaderSkeleton";
 const RoomHeader = () => {
   const { roomID } = useParams();
   const navigate = useNavigate();
   const [roomName, setRoomName] = useState("");
-  const [hostName, setHostName] = useState("");
+  const [roomCount, setRoomCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
+  let fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
+  if(localStorage.getItem('Authorization')) {
+      fetchHeaders = {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('Authorization')}`
+      }
+  }
   async function roomInfo() {
     setIsLoading(true);
     try {
-        let fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
-        if(localStorage.getItem('Authorization')) {
-            fetchHeaders = {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem('Authorization')}`
-            }
-        }
       const res = await fetch(
         `${API_SERVER}/rooms/${roomID}/info`, {
             method: 'GET',
@@ -33,7 +31,7 @@ const RoomHeader = () => {
       const roomInfo = await res.json();
       if (roomInfo?.["errMssg"]) throw new Error(roomInfo?.["errMssg"]);
       setRoomName(roomInfo?.["name"]);
-      setHostName(roomInfo?.["host"]);
+      setRoomCount(roomInfo?.participants.length);
     } catch (error) {
       console.error(error);
     } finally {
@@ -43,14 +41,15 @@ const RoomHeader = () => {
   async function leaveRoom(e: FormEvent) {
     e.preventDefault();
     try {
-      const res = await fetch(
-        `${API_SERVER}/rooms/${roomID}/leave`,
-        genFetchOpts("POST")
-      );
+      const res = await fetch(`${API_SERVER}/rooms/${roomID}/leave`, {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'include',
+        headers: fetchHeaders
+      });
       const data = await res.json();
       if (data?.["errMssg"]) alert(data?.["errMssg"]);
       else {
-        console.log(data?.["mssg"]);
         navigate("/rooms");
       }
     } catch (error) {
@@ -65,13 +64,13 @@ const RoomHeader = () => {
   return (
     <>
       {isLoading ? (
-        <p>Loading..</p>
+       <RoomHeaderSkeleton />
       ) : (
         <div className="navbar bg-base-300 sticky top-0 z-10 shadow-md">
           <div className="flex-none">
             <button
               className="btn btn-square btn-ghost"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate('/rooms')}
             >
               <FaArrowLeft className="text-xl" />
             </button>
@@ -79,15 +78,13 @@ const RoomHeader = () => {
           <div className="flex-1">
             <div className="flex items-center space-x-3">
               <div className="avatar">
-                <div className="w-10 rounded-full border ">
-                  <FaUserGroup className="w-[100%] " />
-                </div>
+                <div className="w-10 rounded-full  border py-[20%] text-center font-extrabold uppercase">{roomName[0]}</div>
               </div>
               <div>
                 <h2 className="text-lg font-semibold">
-                  {roomName} created by {hostName}
+                  {roomName}
                 </h2>
-                <p className="text-sm text-base-content/70">3 participants</p>
+                <p className="text-sm text-base-content/70"> {roomCount} participant(s)</p>
               </div>
             </div>
           </div>

@@ -93,7 +93,6 @@ const ChatRoom = () => {
         const socket = initSocket();
 
         socket.on('connect', () => {
-            console.log('Connected to chat server');
             socket.emit('joinRoom', roomID);
         });
 
@@ -114,7 +113,9 @@ const ChatRoom = () => {
         <div className="flex flex-col h-screen bg-base-200">
             <RoomHeader />
             <div className="flex-1 overflow-hidden">
-                {isLoading && <div className="text-center py-4">Loading...</div>}
+                {isLoading && <div className="text-center">
+                <span className="loading loading-spinner loading-lg"></span>
+        </div>}
                 {err && <ErrorInfo error={err} />}
                 <div className="h-full overflow-y-auto p-4 space-y-4 pb-[8rem]">
                     {messages.map((mssg: IMessageStructure) => (

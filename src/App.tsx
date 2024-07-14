@@ -12,6 +12,7 @@ import JoinRoom from "./pages/Chat/JoinRoom";
 import CreateRoom from "./pages/Chat/CreateRoom";
 import AvailableRooms from "./pages/Chat/AvailableRooms";
 import Attributions from "./pages/Attributions";
+import CopyLink from "./pages/Chat/CopyLink";
 
 const App = () => {
 
@@ -35,7 +36,7 @@ const App = () => {
                     <Route path="/rooms/:roomID/join" element={<ProtectedRoute children={<JoinRoom />} />} />
                     <Route path="/rooms/:roomID/leave" element={<ProtectedRoute children={<LeaveRoom />} />} />
                     <Route path="/available-rooms" element={<ProtectedRoute children={<AvailableRooms />} />} />
-
+                    <Route path="/:joinID/copy-link" element={<ProtectedRoute children={<CopyLink />} />} />
                     {/* Error page */}
                     <Route path="*" element={<ErrorPage />} />
                 </Route>

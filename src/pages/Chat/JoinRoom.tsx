@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER } from "../../utils/env_alias";
 
 const JoinRoom = () => {
-    const {roomID} = useParams();
+    const { roomID } = useParams();
     const navigate = useNavigate();
     const [roomName, setRoomName] = useState('');
     const [host, setHost] = useState('');
@@ -18,7 +18,7 @@ const JoinRoom = () => {
     }
     async function getRoomInfo() {
         try {
-            const res = await fetch(`${API_SERVER}/rooms/${roomID}/info`, {
+            const res = await fetch(`${API_SERVER}/rooms/${roomID}/join_info`, {
                 method: 'GET',
                 headers: fetchHeaders,
                 mode: 'cors',
@@ -44,12 +44,12 @@ const JoinRoom = () => {
             });
             const data = await res.json();
             if(data?.['errMssg']) throw new Error(data?.['errMssg']);
-            navigate(`/rooms/${roomID}/chat`);
+            navigate(`/rooms/${data['room_id']}/chat`);
             
 
         } catch (error) {
             console.log((error as Error).message)
-            if((error as Error).message === "Already a room participant!") navigate(`/rooms/${roomID}/chat`);
+            if((error as Error).message === "Already a room participant!") navigate(`/rooms`);
             else alert(`*${error}*`);
         }
     }

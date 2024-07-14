@@ -11,7 +11,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const location = useLocation();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+    <div className="text-center">
+      <span className="loading loading-spinner loading-lg"></span>
+    </div>);
   }
 
   if (error) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { FaSearch, FaSpinner } from 'react-icons/fa';
 import { API_SERVER } from '../../utils/env_alias';
 
@@ -11,6 +11,7 @@ interface Room {
   messages: any[];
   createdAt: string;
   description?: string;
+  join_id: string;
 }
 
 const AvailableRooms: React.FC = () => {
@@ -18,6 +19,7 @@ const AvailableRooms: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get('search') || '';
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchRooms();
@@ -41,7 +43,8 @@ const AvailableRooms: React.FC = () => {
         credentials: 'include'
       });
       const data = await response.json();
-      setRooms(data?.rooms);
+      const availableRooms = data?.rooms?.filter((room: any) => room.kind === 'public');
+      setRooms(availableRooms);
     } catch (error) {
       console.error('Error fetching rooms:', error);
     } finally {
@@ -88,18 +91,21 @@ const AvailableRooms: React.FC = () => {
                   {/* Add more room details here */}
                   {room.description && <p className="text-sm text-base-content/70">{room.description}</p>}
                   <div className="card-actions justify-end mt-4">
-                    <Link to={`/rooms/${room._id}/join`} className="btn btn-primary btn-sm sm:btn-md">Join</Link>
+                    <Link to={`/rooms/${room.join_id}/join`} className="btn btn-primary btn-sm sm:btn-md">Join</Link>
                   </div>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="alert alert-info max-w-md mx-auto">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span>No rooms found.</span>
-            <div className='mt-8 btn btn-primary mx-auto'>Create Room</div>
+          <div className='container flex flex-col'>
+            <div className="alert alert-info max-w-md mx-auto">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span>No rooms found.</span>
+            </div>
+            <div className='mt-8 btn btn-primary self-center' onClick={() => navigate('/create-room')}>Create Room</div>
           </div>
+
         )}
       </div>
     );

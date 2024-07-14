@@ -10,6 +10,7 @@ const CreateRoom = () => {
     const navigate = useNavigate();
     const [roomName, setRoomName] = useState("");
     const [errorMssg, setErrorMssg] = useState("");
+    const [roomVisibility, setRoomVisibility] = useState("public");
     let fetchHeaders: HeadersInit = { "Content-Type": "application/json" };
     if(localStorage.getItem('Authorization')) {
         fetchHeaders = {
@@ -22,12 +23,12 @@ const CreateRoom = () => {
         headers: fetchHeaders,
         mode: 'cors',
         credentials: 'include',
-        body: JSON.stringify({ name: roomName })
+        body: JSON.stringify({ name: roomName, kind: roomVisibility })
     }
     const [createRoom, { error, isLoading }, reset] = useFetchOnAction(`${API_SERVER}/rooms/create`, {
         ...roomFetchOpts,
         onSuccess: (data) => {
-            if (!data["errMssg"]) navigate('/rooms');
+            if(!data['errMssg']) navigate(`/${data['join_id']}/copy-link`);
         },
         onError: (err) => {
             setErrorMssg(err.message);
@@ -52,8 +53,17 @@ const CreateRoom = () => {
                         <input type="text" className="grow" placeholder="Room Name" onChange={(e) => setRoomName(e.target.value)} />
                     </label>
                 </div>
-                <button className="btn btn-wide btn-neutral flex self-center" disabled={isLoading}>Create</button>
+                <div className="flex flex-col mb-12">
+                    <label htmlFor="visibility">Room Visibility</label>
+                    <select id="visibility" className="select select-info w-full max-w-xs" onChange={(e) => setRoomVisibility(e.target.value)}>
+                            <option value="public">Public</option>
+                            <option value="private">Private</option>
+                    </select>
+                </div>
+
+                <button className="btn btn-wide btn-neutral  hover:btn-primary flex self-center" disabled={isLoading}>Create</button>
             </form>
+            
         </div>
     )
 }
