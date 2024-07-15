@@ -1,5 +1,5 @@
 import { BiClipboard } from "react-icons/bi";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const CopyLink = () => {
     const { joinID } = useParams();
