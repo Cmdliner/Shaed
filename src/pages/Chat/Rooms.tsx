@@ -81,7 +81,7 @@ const Rooms = () => {
       ) : rooms.length === 0 ? (
         <div className="flex flex-col">
           <div className="text-center text-lg">No rooms found. Create one to get started!</div>
-          <div className='mt-8 btn btn-primary self-center'>Create Room</div>
+          <Link to="/create-room" className='mt-8 btn btn-primary self-center'>Create Room</Link>
         </div>
       ) : (
         <motion.ul 
