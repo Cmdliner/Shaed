@@ -16,7 +16,7 @@ const Header: React.FC = () => {
         navigate('/login');
     }
     return (
-        <header className="navbar bg-base-100 justify-between fixed z-[9999]">
+        <header className="navbar bg-base-200 bg-opacity-90 justify-between fixed z-[9999]">
             <div className="bg-base-100">
                 <Link to="/" className="btn btn-ghost text-xl">Shaed</Link>
             </div>
