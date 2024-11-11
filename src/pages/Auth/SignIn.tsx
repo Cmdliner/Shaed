@@ -1,11 +1,13 @@
-import { FormEvent, useState } from "react";
+import { FC, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AUTH_SERVER } from "../../utils/env_alias";
 import ErrorInfo from "../../components/ErrorInfo";
 
+/* type AuthProps = {
+    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
+} */
 
-
-const SignIn = () => {
+const SignIn: FC = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [err, setError] = useState("");

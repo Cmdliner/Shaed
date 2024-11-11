@@ -1,12 +1,12 @@
 import { AUTH_SERVER } from "./env_alias";
 import { useState, useEffect } from "react";
 
-const useAuth = () => {
-    interface IAuthData {
-        errMssg?: string;
-        authenticated: boolean;
-    }
+interface IAuthData {
+    errMssg?: string;
+    authenticated: boolean;
+}
 
+const useAuth = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
